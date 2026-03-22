@@ -1,6 +1,6 @@
 # Change Log
 
-## 0.0.0
+## 0.1.0
 
 - Initial release.
 - `x-nano` directive: bind a Nano Store to a named scope property with automatic cleanup.
