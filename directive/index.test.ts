@@ -2,7 +2,7 @@ import Alpine from 'alpinejs'
 import { atom, computed, map, onMount, STORE_UNMOUNT_DELAY } from 'nanostores'
 import { expect, it } from 'vitest'
 
-import { mount } from '../test/helpers.js'
+import { getEl, mount } from '../test/helpers.js'
 
 // x-nano directive
 
@@ -13,7 +13,7 @@ it('exposes atom store value in scope on mount', async () => {
     { counter: $counter }
   )
 
-  expect(body.querySelector('#out').textContent).toBe('42')
+  expect(getEl(body, '#out').textContent).toBe('42')
 })
 
 it('updates scope when atom store changes', async () => {
@@ -26,7 +26,7 @@ it('updates scope when atom store changes', async () => {
   $counter.set(99)
   await Alpine.nextTick()
 
-  expect(body.querySelector('#out').textContent).toBe('99')
+  expect(getEl(body, '#out').textContent).toBe('99')
 })
 
 it('exposes map store value in scope on mount', async () => {
@@ -36,7 +36,7 @@ it('exposes map store value in scope on mount', async () => {
     { user: $user }
   )
 
-  expect(body.querySelector('#out').textContent).toBe('Alice')
+  expect(getEl(body, '#out').textContent).toBe('Alice')
 })
 
 it('updates scope when map store key changes', async () => {
@@ -49,7 +49,7 @@ it('updates scope when map store key changes', async () => {
   $user.setKey('name', 'Bob')
   await Alpine.nextTick()
 
-  expect(body.querySelector('#out').textContent).toBe('Bob')
+  expect(getEl(body, '#out').textContent).toBe('Bob')
 })
 
 it('exposes computed store value in scope', async () => {
@@ -60,12 +60,12 @@ it('exposes computed store value in scope', async () => {
     { doubled: $doubled }
   )
 
-  expect(body.querySelector('#out').textContent).toBe('20')
+  expect(getEl(body, '#out').textContent).toBe('20')
 
   $base.set(5)
   await Alpine.nextTick()
 
-  expect(body.querySelector('#out').textContent).toBe('10')
+  expect(getEl(body, '#out').textContent).toBe('10')
 })
 
 it('supports multiple x-nano directives on one element', async () => {
@@ -76,13 +76,13 @@ it('supports multiple x-nano directives on one element', async () => {
     { a: $a, b: $b }
   )
 
-  expect(body.querySelector('#out').textContent).toBe('hello world')
+  expect(getEl(body, '#out').textContent).toBe('hello world')
 
   $a.set('hi')
   $b.set('there')
   await Alpine.nextTick()
 
-  expect(body.querySelector('#out').textContent).toBe('hi there')
+  expect(getEl(body, '#out').textContent).toBe('hi there')
 })
 
 it('unsubscribes when element is removed', async () => {
@@ -103,7 +103,7 @@ it('unsubscribes when element is removed', async () => {
 
   expect(mounted).toBe(true)
 
-  body.querySelector('#wrap').remove()
+  getEl(body, '#wrap').remove()
   await new Promise(resolve => setTimeout(resolve, STORE_UNMOUNT_DELAY + 50))
 
   expect(mounted).toBe(false)
@@ -134,8 +134,8 @@ it('binds atom store two-way via x-nano-model', async () => {
     { name: $name }
   )
 
-  expect(body.querySelector('#out').textContent).toBe('Alice')
-  expect(body.querySelector('#inp').value).toBe('Alice')
+  expect(getEl(body, '#out').textContent).toBe('Alice')
+  expect(getEl<HTMLInputElement>(body, '#inp').value).toBe('Alice')
 })
 
 it('updates display when store changes via x-nano-model', async () => {
@@ -148,7 +148,7 @@ it('updates display when store changes via x-nano-model', async () => {
   $name.set('Bob')
   await Alpine.nextTick()
 
-  expect(body.querySelector('#out').textContent).toBe('Bob')
+  expect(getEl(body, '#out').textContent).toBe('Bob')
 })
 
 it('updates store when input changes via x-nano-model', async () => {
@@ -158,7 +158,7 @@ it('updates store when input changes via x-nano-model', async () => {
     { name: $name }
   )
 
-  let input = body.querySelector('#inp')
+  let input = getEl<HTMLInputElement>(body, '#inp')
   input.value = 'Charlie'
   input.dispatchEvent(new Event('input'))
   await Alpine.nextTick()
@@ -184,7 +184,7 @@ it('unsubscribes x-nano-model when element is removed', async () => {
 
   expect(mounted).toBe(true)
 
-  body.querySelector('#wrap').remove()
+  getEl(body, '#wrap').remove()
   await new Promise(resolve => setTimeout(resolve, STORE_UNMOUNT_DELAY + 50))
 
   expect(mounted).toBe(false)

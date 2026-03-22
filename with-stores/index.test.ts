@@ -2,12 +2,12 @@ import Alpine from 'alpinejs'
 import { atom, map, onMount, STORE_UNMOUNT_DELAY } from 'nanostores'
 import { expect, it } from 'vitest'
 
-import { mount } from '../test/helpers.js'
+import { getEl, mount } from '../test/helpers.js'
 import { withStores } from './index.js'
 
 it('provides initial store values to factory', async () => {
   let $name = atom('Alice')
-  let received
+  let received: string | undefined
 
   Alpine.data(
     'testInit',
@@ -32,7 +32,7 @@ it('exposes store values as component properties', async () => {
 
   let body = await mount('<div x-data="testProp"><span id="out" x-text="count"></span></div>', {})
 
-  expect(body.querySelector('#out').textContent).toBe('5')
+  expect(getEl(body, '#out').textContent).toBe('5')
 })
 
 it('updates component property when atom store changes', async () => {
@@ -51,7 +51,7 @@ it('updates component property when atom store changes', async () => {
   $count.set(42)
   await Alpine.nextTick()
 
-  expect(body.querySelector('#out').textContent).toBe('42')
+  expect(getEl(body, '#out').textContent).toBe('42')
 })
 
 it('updates component property when map store key changes', async () => {
@@ -70,18 +70,18 @@ it('updates component property when map store key changes', async () => {
   $user.setKey('name', 'Bob')
   await Alpine.nextTick()
 
-  expect(body.querySelector('#out').textContent).toBe('Bob')
+  expect(getEl(body, '#out').textContent).toBe('Bob')
 })
 
 it('calls user-defined init after subscriptions', async () => {
   let $count = atom(10)
-  let initValue
+  let initValue: number | undefined
 
   Alpine.data(
     'testUserInit',
     withStores({ count: $count }, () => ({
       init() {
-        initValue = this.count
+        initValue = (this as unknown as { count: number }).count
       }
     }))
   )
@@ -106,7 +106,7 @@ it('calls user-defined destroy on cleanup', async () => {
 
   let body = await mount('<div x-data><div id="comp" x-data="testDestroy"></div></div>', {})
 
-  body.querySelector('#comp').remove()
+  getEl(body, '#comp').remove()
   await Alpine.nextTick()
 
   expect(destroyed).toBe(true)
@@ -132,7 +132,7 @@ it('unsubscribes all stores when component is destroyed', async () => {
 
   expect(mounted).toBe(true)
 
-  body.querySelector('#comp').remove()
+  getEl(body, '#comp').remove()
   await new Promise(resolve => setTimeout(resolve, STORE_UNMOUNT_DELAY + 50))
 
   expect(mounted).toBe(false)
@@ -152,13 +152,13 @@ it('supports multiple stores simultaneously', async () => {
     {}
   )
 
-  expect(body.querySelector('#out').textContent).toBe('hello world')
+  expect(getEl(body, '#out').textContent).toBe('hello world')
 
   $first.set('hi')
   $second.set('there')
   await Alpine.nextTick()
 
-  expect(body.querySelector('#out').textContent).toBe('hi there')
+  expect(getEl(body, '#out').textContent).toBe('hi there')
 })
 
 it('merges factory methods with store values', async () => {
@@ -168,7 +168,7 @@ it('merges factory methods with store values', async () => {
     'testMethods',
     withStores({ count: $count }, () => ({
       increment() {
-        $count.set(this.count + 1)
+        $count.set((this as unknown as { count: number }).count + 1)
       }
     }))
   )
@@ -178,9 +178,9 @@ it('merges factory methods with store values', async () => {
     {}
   )
 
-  body.querySelector('#btn').click()
+  getEl<HTMLButtonElement>(body, '#btn').click()
   await Alpine.nextTick()
 
-  expect(body.querySelector('#out').textContent).toBe('1')
+  expect(getEl(body, '#out').textContent).toBe('1')
   expect($count.get()).toBe(1)
 })
