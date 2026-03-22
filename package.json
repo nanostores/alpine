@@ -1,0 +1,111 @@
+{
+  "name": "nanostores-alpine",
+  "version": "0.0.0",
+  "description": "Alpine.js integration for Nano Stores, a tiny state manager with many atomic tree-shakable stores",
+  "keywords": [
+    "alpine",
+    "alpinejs",
+    "state",
+    "state manager",
+    "store"
+  ],
+  "license": "MIT",
+  "author": "Eduard Aksamitov <e@euaaaio.ru>",
+  "repository": "euaaaio/nanostores-alpine",
+  "funding": [
+    {
+      "type": "buymeacoffee",
+      "url": "https://buymeacoffee.com/euaaaio"
+    }
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "types": "./index.d.ts",
+  "exports": {
+    ".": "./index.js",
+    "./with-stores": "./with-stores/index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "demo": "vite demo",
+    "test:format": "oxfmt --check",
+    "test:lint": "eslint .",
+    "test:coverage": "vitest run --coverage",
+    "test:types": "check-dts",
+    "test:size": "size-limit",
+    "test": "pnpm --color run /^test:/",
+    "format": "oxfmt"
+  },
+  "devDependencies": {
+    "@logux/eslint-config": "57.0.2",
+    "@size-limit/preset-small-lib": "^12.0.1",
+    "@types/node": "^25.0.0",
+    "@vitest/coverage-v8": "^4.0.18",
+    "alpinejs": "^3.14.9",
+    "check-dts": "^0.9.0",
+    "eslint": "^10.0.3",
+    "happy-dom": "^20.8.3",
+    "nano-staged": "^0.9.0",
+    "nanostores": "^1.1.1",
+    "oxfmt": "^0.41.0",
+    "simple-git-hooks": "^2.13.0",
+    "size-limit": "^12.0.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.1",
+    "vitest": "^4.0.18"
+  },
+  "peerDependencies": {
+    "alpinejs": ">=3.0.0",
+    "nanostores": "^0.11.3 || ^1.0.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "./node_modules/.bin/nano-staged"
+  },
+  "nano-staged": {
+    "*.{js,ts}": [
+      "oxfmt --write",
+      "eslint --fix"
+    ]
+  },
+  "size-limit": [
+    {
+      "name": "directive",
+      "import": {
+        "./index.js": "{ directivePlugin }",
+        "nanostores": "{ atom }"
+      },
+      "limit": "378 B"
+    },
+    {
+      "name": "magic",
+      "import": {
+        "./index.js": "{ magicPlugin }",
+        "nanostores": "{ atom }"
+      },
+      "limit": "448 B"
+    },
+    {
+      "name": "full plugin",
+      "import": {
+        "./index.js": "{ NanoStores }",
+        "nanostores": "{ atom, map, computed }"
+      },
+      "limit": "1.2 kB"
+    },
+    {
+      "name": "withStores",
+      "import": {
+        "./with-stores/index.js": "{ withStores }",
+        "nanostores": "{ atom, map }"
+      },
+      "limit": "478 B"
+    }
+  ],
+  "engines": {
+    "node": "^20.0.0 || >=22.0.0"
+  },
+  "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017",
+  "clean-publish": {
+    "cleanDocs": true
+  }
+}

@@ -1,0 +1,9 @@
+pnpm-lock.yaml
+tsconfig.json
+vitest.config.ts
+
+demo/
+coverage/
+**/*.test.*
+**/types.ts
+**/errors.ts
