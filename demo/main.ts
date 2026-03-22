@@ -22,8 +22,8 @@ Alpine.magic('username', () => $username)
 Alpine.data(
   'dashboard',
   withStores({ lastAction: $lastAction, total: $clicks }, () => ({
-    click(this: { total: number }, label: string) {
-      $clicks.set(this.total + 1)
+    click(label: string) {
+      $clicks.set($clicks.get() + 1)
       $lastAction.set(`Button ${label}`)
     },
     reset() {
