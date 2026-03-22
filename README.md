@@ -20,7 +20,7 @@
 ## Install
 
 ```sh
-npm install nanostores alpinejs nanostores-alpine
+npm install nanostores alpinejs @nanostores/alpine
 ```
 
 
@@ -30,7 +30,7 @@ npm install nanostores alpinejs nanostores-alpine
 
 ```js
 import Alpine from 'alpinejs'
-import { NanoStores } from 'nanostores-alpine'
+import { NanoStores } from '@nanostores/alpine'
 
 Alpine.plugin(NanoStores)
 Alpine.start()
@@ -39,7 +39,7 @@ Alpine.start()
 Or register individual parts:
 
 ```js
-import { directivePlugin, magicPlugin } from 'nanostores-alpine'
+import { directivePlugin, magicPlugin } from '@nanostores/alpine'
 
 // Registers x-nano and x-nano-model directives
 Alpine.plugin(directivePlugin)
@@ -82,7 +82,7 @@ Combine reads with mutations:
 ### Model
 
 Two-way binding between a store and a form input. Changes to the input update
-the store; store changes reflect in the input.
+the store. Store changes reflect in the input.
 
 ```html
 <div x-data x-nano-model:name="$name">
@@ -112,13 +112,13 @@ wrapping in `x-data`. Useful for attribute bindings and one-off reads.
 
 ### Data
 
-For `Alpine.data` components. Injects store values as typed initial state and
+Injects store values as typed initial state and
 keeps them in sync through the component lifecycle. Best choice when you want
 to keep store logic out of the template entirely.
 
 ```js
 import Alpine from 'alpinejs'
-import { withStores } from 'nanostores-alpine/with-stores'
+import { withStores } from '@nanostores/alpine/with-stores'
 import { $cart, $profile } from './stores.js'
 
 Alpine.data(
@@ -143,30 +143,6 @@ Alpine.data(
   <span x-text="cartCount + ' items'"></span>
   <button @click="clearCart">Clear</button>
 </header>
-```
-
-
-## TypeScript
-
-```ts
-import { atom, map } from 'nanostores'
-import { withStores } from 'nanostores-alpine/with-stores'
-
-const $user = map({ name: 'Alice', role: 'admin' })
-const $notifications = atom(0)
-
-Alpine.data(
-  'userProfile',
-  withStores({ user: $user, unread: $notifications }, () => ({
-    // user: { name: string, role: string }, unread: number
-    get greeting(): string {
-      return `Hi, ${this.user.name}`
-    },
-    get hasUnread(): boolean {
-      return this.unread > 0
-    }
-  }))
-)
 ```
 
 

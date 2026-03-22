@@ -1,17 +1,17 @@
 {
-  "name": "nanostores-alpine",
+  "name": "@nanostores/alpine",
   "version": "0.0.0",
   "description": "Alpine.js integration for Nano Stores, a tiny state manager with many atomic tree-shakable stores",
   "keywords": [
-    "alpine",
-    "alpinejs",
+    "store",
     "state",
     "state manager",
-    "store"
+    "alpine",
+    "alpinejs"
   ],
   "license": "MIT",
   "author": "Eduard Aksamitov <e@euaaaio.ru>",
-  "repository": "euaaaio/nanostores-alpine",
+  "repository": "nanostores/alpine",
   "funding": [
     {
       "type": "buymeacoffee",

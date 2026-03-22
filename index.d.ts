@@ -7,7 +7,7 @@ export { magicPlugin } from './magic/index.js'
  *
  * ```js
  * import Alpine from 'alpinejs'
- * import { NanoStores } from 'nanostores-alpine'
+ * import { NanoStores } from '@nanostores/alpine'
  *
  * Alpine.plugin(NanoStores)
  * Alpine.start()
