@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "description": "Alpine.js integration for Nano Stores, a tiny state manager with many atomic tree-shakable stores",
   "keywords": [
-    "store",
+    "alpine",
+    "alpinejs",
     "state",
     "state manager",
-    "alpine",
-    "alpinejs"
+    "store"
   ],
   "license": "MIT",
   "author": "Eduard Aksamitov <e@euaaaio.ru>",
