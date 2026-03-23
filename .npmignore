@@ -1,6 +1,7 @@
 pnpm-lock.yaml
 tsconfig.json
 vitest.config.ts
+.oxfmtrc.json
 
 demo/
 coverage/
