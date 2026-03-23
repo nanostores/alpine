@@ -1,3 +1,4 @@
+import type Alpine from 'alpinejs'
 import type { AnyStore, StoreValue } from 'nanostores'
 
 type StoresMap = Record<string, AnyStore>
@@ -10,9 +11,9 @@ type StoreValues<T extends StoresMap> = { [K in keyof T]: StoreValue<T[K]> }
  * in sync. Subscriptions are created on `init` and cleaned up on `destroy`.
  *
  * ```js
- * Alpine.data('dashboard', withStores({ count: $counter, user: $user }, ({ count, user }) => ({
+ * Alpine.data('dashboard', withStores({ count: $counter, user: $user }, () => ({
  *   greeting() {
- *     return `Hello, ${user.name}! Count: ${count}`
+ *     return `Hello, ${this.user.name}! Count: ${this.count}`
  *   }
  * })))
  * ```
@@ -23,5 +24,13 @@ type StoreValues<T extends StoresMap> = { [K in keyof T]: StoreValue<T[K]> }
  */
 export declare function withStores<Stores extends StoresMap, Component extends object>(
   stores: Stores,
-  factory: (values: StoreValues<Stores>) => Component
-): () => { destroy(): void; init(): void } & Component & StoreValues<Stores>
+  factory: (
+    values: StoreValues<Stores>
+  ) => Component &
+    ThisType<
+      Alpine.Magics<Component & StoreValues<Stores>> &
+        Alpine.XDataContext &
+        Component &
+        StoreValues<Stores>
+    >
+): () => Alpine.AlpineComponent<Component & StoreValues<Stores>>
